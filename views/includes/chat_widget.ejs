@@ -1,0 +1,120 @@
+<!-- Floating Wanderlust AI Chat Board Agent Widget -->
+<div class="wanderlust-chat-container" id="wanderlustChatContainer">
+  <!-- Floating Launcher Button -->
+  <button 
+    class="chat-launcher-btn shadow-lg" 
+    id="chatLauncherBtn" 
+    type="button" 
+    aria-label="Open Wanderlust AI Assistant"
+    title="Chat with Wanderlust AI"
+  >
+    <div class="chat-launcher-icon">
+      <i class="fa-solid fa-comments"></i>
+    </div>
+    <span class="chat-launcher-label d-none d-sm-inline">Chat Assistant</span>
+    <span class="chat-status-pulse"></span>
+  </button>
+
+  <!-- Chat Board Window -->
+  <div class="chat-board-card shadow-lg" id="chatBoardWindow" role="dialog" aria-hidden="true">
+    <!-- Header -->
+    <div class="chat-board-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar-wrapper">
+          <div class="chat-avatar">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+          <span class="chat-online-indicator" title="Agent Online"></span>
+        </div>
+        <div class="chat-header-info">
+          <div class="chat-header-title-row">
+            <h6 class="chat-title mb-0">Wanderlust AI</h6>
+            <span class="chat-badge" title="Trained strictly on Wanderlust stays and bookings">
+              <i class="fa-solid fa-shield-halved me-1"></i>Site Concierge
+            </span>
+          </div>
+          <small class="chat-subtitle">Vacation & Stay Assistant</small>
+        </div>
+      </div>
+
+      <div class="chat-header-actions">
+        <button class="chat-icon-btn" id="chatClearBtn" type="button" title="Clear conversation" aria-label="Clear conversation">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+        <button class="chat-icon-btn" id="chatCloseBtn" type="button" title="Close chat" aria-label="Close chat">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Limitation Banner -->
+    <div class="chat-limitation-banner">
+      <i class="fa-solid fa-circle-exclamation me-1 text-danger"></i>
+      <span>Answers limited strictly to Wanderlust stays, bookings & hosting.</span>
+    </div>
+
+    <!-- Chat Messages Scroll Area -->
+    <div class="chat-messages-area" id="chatMessagesArea">
+      <!-- Default Initial Welcome Message -->
+      <div class="chat-msg chat-msg-bot">
+        <div class="chat-msg-avatar">
+          <i class="fa-solid fa-comments"></i>
+        </div>
+        <div class="chat-msg-content">
+          <div class="chat-bubble">
+            <p class="mb-2">
+              👋 <strong>Hi there!</strong> I am your <strong>Wanderlust AI Guide</strong>.
+            </p>
+            <p class="mb-2">
+              I can help you discover amazing stays across 35+ countries, calculate reservation fees & taxes, or guide you on how to host a property!
+            </p>
+            <div class="chat-intro-note">
+              <i class="fa-solid fa-lock text-secondary me-1"></i>
+              <small class="text-muted">Domain Limited: I cannot answer off-topic questions (coding, math, general trivia).</small>
+            </div>
+          </div>
+
+          <!-- Quick Suggestion Pills -->
+          <div class="chat-quick-suggestions mt-2">
+            <span class="suggestion-chip" data-prompt="Find beachfront villas in Greece">🏖️ Beachfront in Greece</span>
+            <span class="suggestion-chip" data-prompt="Show me stays under ₹3,000 / night">💰 Stays under ₹3,000</span>
+            <span class="suggestion-chip" data-prompt="How do I book a stay and what are the fees?">📅 Booking & Fee guide</span>
+            <span class="suggestion-chip" data-prompt="How do I list my property as a host?">🏡 How to host</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typing Indicator (Hidden by default) -->
+    <div class="chat-typing-indicator d-none" id="chatTypingIndicator">
+      <div class="chat-msg-avatar">
+        <i class="fa-solid fa-comments"></i>
+      </div>
+      <div class="typing-bubble">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+    <!-- Footer / Input Form -->
+    <div class="chat-board-footer">
+      <form id="chatForm" class="chat-input-form" autocomplete="off">
+        <input 
+          type="text" 
+          id="chatInput" 
+          class="chat-text-input" 
+          placeholder="Ask about stays, booking, hosting..." 
+          maxlength="300"
+          aria-label="Ask Wanderlust AI"
+        />
+        <button type="submit" id="chatSendBtn" class="chat-send-btn" aria-label="Send message" disabled>
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
+      <div class="chat-disclaimer">
+        <span>Trained strictly on Wanderlust platform stays & policies</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+<% layout("/layouts/boilerplates") %>
+
+<div class="row justify-content-center my-4">
+  <div class="col-lg-8 col-md-10">
+    <div class="form-card">
+      <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+        <div class="host-avatar me-3" style="width: 44px; height: 44px; font-size: 1.1rem;">
+          <i class="fa-solid fa-house-chimney"></i>
+        </div>
+        <div>
+          <h3 class="fw-bold mb-0">Host your place</h3>
+          <p class="text-muted small mb-0">Fill in the details to publish your listing on Wanderlust</p>
+        </div>
+      </div>
+
+      <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+        <!-- Title -->
+        <div class="mb-3">
+          <label for="title" class="form-label">Property Title</label>
+          <input 
+            type="text" 
+            id="title" 
+            placeholder="e.g. Luxury Seafront Villa with Infinity Pool" 
+            name="listing[title]" 
+            class="form-control" 
+            required
+          >
+          <div class="valid-feedback">Looks great!</div>
+          <div class="invalid-feedback">Please enter a catchy title for your listing.</div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea 
+            id="description" 
+            placeholder="Describe the atmosphere, views, bedroom count, nearby attractions..." 
+            name="listing[description]" 
+            class="form-control" 
+            rows="4" 
+            required
+          ></textarea>
+          <div class="invalid-feedback">Please provide a brief description of the place.</div>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="mb-3">
+          <label for="image" class="form-label">Upload Listing Image</label>
+          <input 
+            type="file" 
+            id="image" 
+            name="listing[image]" 
+            class="form-control"
+            accept="image/*"
+          >
+          <div class="form-text small text-muted">High quality JPG, PNG, or WEBP photos work best.</div>
+        </div>
+
+        <!-- Price and Country in a row -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-5">
+            <label for="price" class="form-label">Price per Night (&#8377;)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0">&#8377;</span>
+              <input 
+                type="number" 
+                id="price" 
+                placeholder="2500" 
+                name="listing[price]" 
+                class="form-control border-start-0" 
+                min="100" 
+                required
+              >
+              <div class="invalid-feedback">Please enter a valid positive price.</div>
+            </div>
+          </div>
+
+          <div class="col-md-7">
+            <label for="country" class="form-label">Country</label>
+            <input 
+              type="text" 
+              id="country" 
+              placeholder="e.g. India" 
+              name="listing[country]" 
+              class="form-control" 
+              required
+            >
+            <div class="invalid-feedback">Please specify the country.</div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-4">
+          <label for="location" class="form-label">Location / City</label>
+          <input 
+            type="text" 
+            id="location" 
+            placeholder="e.g. Candolim, Goa" 
+            name="listing[location]" 
+            class="form-control" 
+            required
+          >
+          <div class="invalid-feedback">Please provide the city or local area name.</div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary-custom px-4 py-2">
+            <i class="fa-solid fa-plus me-2"></i>Create Listing
+          </button>
+          <a href="/listings" class="btn btn-outline-secondary px-4 py-2 rounded-3">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

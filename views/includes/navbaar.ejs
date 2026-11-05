@@ -1,0 +1,113 @@
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top py-2">
+  <div class="container-fluid px-md-4">
+    <!-- Brand Logo -->
+    <a class="navbar-brand" href="/listings">
+      <i class="fa-solid fa-compass"></i>
+      <span>wanderlust</span>
+    </a>
+
+    <!-- Center Search Bar -->
+    <form class="nav-search-form d-none d-md-flex mx-auto" action="/listings" method="GET">
+      <input 
+        class="nav-search-input" 
+        type="text" 
+        name="q" 
+        placeholder="Search destinations, villas, cities..."
+        value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+      >
+      <button class="nav-search-btn" type="submit" aria-label="Search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+
+    <!-- Mobile Toggler -->
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Nav Items -->
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <!-- Mobile Search Form -->
+      <form class="nav-search-form d-flex d-md-none my-3" action="/listings" method="GET">
+        <input 
+          class="nav-search-input" 
+          type="text" 
+          name="q" 
+          placeholder="Search destinations..."
+          value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+        >
+        <button class="nav-search-btn" type="submit" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+
+      <div class="navbar-nav ms-auto align-items-md-center gap-1">
+        <a class="nav-link" href="/listings">Explore</a>
+
+        <!-- Host only nav links -->
+        <% if (currUser && currUser.role === 'host') { %>
+          <a class="nav-link text-danger fw-semibold" href="/host/dashboard">
+            <i class="fa-solid fa-gauge-high me-1"></i>Host Dashboard
+          </a>
+          <a class="nav-link" href="/listings/new">
+            <i class="fa-solid fa-plus me-1 text-danger"></i>Post Stay
+          </a>
+        <% } %>
+
+        <!-- Traveler only nav links -->
+        <% if (currUser && currUser.role !== 'host') { %>
+          <a class="nav-link" href="/bookings">
+            <i class="fa-solid fa-suitcase-rolling me-1 text-primary"></i>My Trips
+          </a>
+        <% } %>
+        
+        <div class="vr mx-2 d-none d-md-block text-secondary opacity-25"></div>
+
+        <% if (!currUser) { %>
+          <a class="nav-link fw-bold" href="/login">Log in</a>
+          <a class="btn btn-primary-custom btn-sm px-3 py-2 ms-md-2" href="/signup">Sign up</a>
+        <% } %>
+
+        <% if (currUser) { %>
+          <div class="nav-item dropdown">
+            <a class="user-pill dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-bars me-1 text-secondary"></i>
+              <i class="fa-solid fa-circle-user user-avatar-icon"></i>
+              <span class="d-none d-lg-inline fw-semibold"><%= currUser.username %></span>
+              <span class="badge <%= currUser.role === 'host' ? 'bg-danger-subtle text-danger' : 'bg-primary-subtle text-primary' %> rounded-pill small px-2">
+                <%= currUser.role === 'host' ? 'Host' : 'Traveler' %>
+              </span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-4 mt-2 p-2" style="min-width: 220px;">
+              <li>
+                <div class="dropdown-item-text small text-muted">
+                  Signed in as <b><%= currUser.username %></b>
+                  <div class="badge <%= currUser.role === 'host' ? 'bg-danger text-white' : 'bg-primary text-white' %> mt-1">
+                    <%= currUser.role === 'host' ? 'Property Host Account' : 'Traveler Account' %>
+                  </div>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              
+              <!-- Host Specific Menu -->
+              <% if (currUser.role === 'host') { %>
+                <li><a class="dropdown-item rounded-3 fw-semibold text-danger" href="/host/dashboard"><i class="fa-solid fa-gauge-high me-2"></i>Host Dashboard</a></li>
+                <li><a class="dropdown-item rounded-3" href="/listings/new"><i class="fa-solid fa-plus me-2 text-danger"></i>Post New Stay</a></li>
+                <li><a class="dropdown-item rounded-3" href="/listings"><i class="fa-solid fa-compass me-2"></i>Browse All Stays</a></li>
+              <% } %>
+
+              <!-- Traveler Specific Menu -->
+              <% if (currUser.role !== 'host') { %>
+                <li><a class="dropdown-item rounded-3 fw-semibold text-primary" href="/bookings"><i class="fa-solid fa-suitcase-rolling me-2"></i>My Reservations</a></li>
+                <li><a class="dropdown-item rounded-3" href="/listings"><i class="fa-solid fa-compass me-2"></i>Explore Stays</a></li>
+              <% } %>
+
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger rounded-3" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Logout</a></li>
+            </ul>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>

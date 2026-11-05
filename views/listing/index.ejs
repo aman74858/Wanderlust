@@ -1,0 +1,166 @@
+<% layout("/layouts/boilerplates") %>
+
+<!-- Category Filters Bar & Tax Switch (Clean & Standard) -->
+<div class="filter-bar-wrapper mb-4">
+  <div class="category-nav-wrapper">
+    <!-- Carousel Scroll Left Button -->
+    <button class="cat-scroll-btn cat-scroll-left d-none d-md-flex" id="catScrollLeft" type="button" aria-label="Scroll left">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <!-- Category Filters -->
+    <div class="filters-scroll" id="categoryScroll">
+      <a href="/listings" class="filter-item <%= !selectedCategory ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-solid fa-fire"></i></div>
+        <span>Trending</span>
+      </a>
+      <a href="/listings?category=Rooms" class="filter-item <%= selectedCategory === 'Rooms' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-solid fa-bed"></i></div>
+        <span>Rooms</span>
+      </a>
+      <a href="/listings?category=Iconic Cities" class="filter-item <%= selectedCategory === 'Iconic Cities' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-solid fa-mountain-city"></i></div>
+        <span>Iconic Cities</span>
+      </a>
+      <a href="/listings?category=Mountains" class="filter-item <%= selectedCategory === 'Mountains' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-solid fa-mountain"></i></div>
+        <span>Mountains</span>
+      </a>
+      <a href="/listings?category=Castles" class="filter-item <%= selectedCategory === 'Castles' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-brands fa-fort-awesome"></i></div>
+        <span>Castles</span>
+      </a>
+      <a href="/listings?category=Amazing Pools" class="filter-item <%= selectedCategory === 'Amazing Pools' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-solid fa-person-swimming"></i></div>
+        <span>Pools</span>
+      </a>
+      <a href="/listings?category=Camping" class="filter-item <%= selectedCategory === 'Camping' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-solid fa-campground"></i></div>
+        <span>Camping</span>
+      </a>
+      <a href="/listings?category=Farms" class="filter-item <%= selectedCategory === 'Farms' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-solid fa-cow"></i></div>
+        <span>Farms</span>
+      </a>
+      <a href="/listings?category=Arctic" class="filter-item <%= selectedCategory === 'Arctic' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-regular fa-snowflake"></i></div>
+        <span>Arctic</span>
+      </a>
+      <a href="/listings?category=Beachfront" class="filter-item <%= selectedCategory === 'Beachfront' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-solid fa-umbrella-beach"></i></div>
+        <span>Beachfront</span>
+      </a>
+      <a href="/listings?category=Boats" class="filter-item <%= selectedCategory === 'Boats' ? 'active' : '' %>">
+        <div class="filter-icon-wrapper"><i class="fa-solid fa-sailboat"></i></div>
+        <span>Boats</span>
+      </a>
+    </div>
+
+    <!-- Carousel Scroll Right Button -->
+    <button class="cat-scroll-btn cat-scroll-right d-none d-md-flex" id="catScrollRight" type="button" aria-label="Scroll right">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Tax Toggle Switch Box -->
+  <div class="tax-toggle-box ms-md-3" id="taxToggleBox" role="button" tabindex="0">
+    <div class="d-flex align-items-center justify-content-between gap-3 w-100">
+      <label class="form-check-label fw-semibold small text-nowrap mb-0 cursor-pointer user-select-none" for="flexSwitchCheckDefault">
+        Display total after taxes
+      </label>
+      <div class="form-check form-switch m-0 p-0 d-flex align-items-center">
+        <input class="form-check-input custom-tax-switch m-0 cursor-pointer" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Active Filter / Search Banner (shown only when filtering or searching) -->
+<% if ((typeof searchQuery !== 'undefined' && searchQuery) || (typeof selectedCategory !== 'undefined' && selectedCategory)) { %>
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+    <div class="d-flex align-items-center gap-2">
+      <% if (typeof searchQuery !== 'undefined' && searchQuery) { %>
+        <div class="active-filter-badge">
+          <span>Search: "<strong><%= searchQuery %></strong>"</span>
+          <a href="/listings" class="ms-2 text-danger" title="Remove filter"><i class="fa-solid fa-xmark"></i></a>
+        </div>
+      <% } %>
+      <% if (typeof selectedCategory !== 'undefined' && selectedCategory) { %>
+        <div class="active-filter-badge">
+          <span>Category: <strong><%= selectedCategory %></strong></span>
+          <a href="/listings" class="ms-2 text-danger" title="Remove category"><i class="fa-solid fa-xmark"></i></a>
+        </div>
+      <% } %>
+      <span class="text-muted small fw-medium">
+        <strong class="text-dark"><%= allListings ? allListings.length : 0 %></strong> stay<%= allListings && allListings.length === 1 ? '' : 's' %> found
+      </span>
+    </div>
+
+    <a href="/listings" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+      <i class="fa-solid fa-rotate-left me-1"></i>Clear filters
+    </a>
+  </div>
+<% } %>
+
+<!-- Listings Grid -->
+<% if (allListings && allListings.length > 0) { %>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-4">
+    <% for (let listing of allListings) { %>
+      <div class="col">
+        <a href="/listings/<%= listing._id %>" class="listing-link">
+          <div class="card listing-card h-100">
+            <div class="card-img-wrapper">
+              <img 
+                src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60' %>" 
+                class="card-img-top" 
+                alt="<%= listing.title %>"
+                loading="lazy"
+              >
+              
+              <!-- Wishlist Heart Button -->
+              <button class="heart-btn" aria-label="Add to wishlist" type="button" title="Save to wishlist">
+                <i class="fa-regular fa-heart"></i>
+              </button>
+
+              <!-- Guest Favorite Badge -->
+              <div class="card-badge-container">
+                <span class="guest-favorite-badge">
+                  <i class="fa-solid fa-star text-warning me-1"></i>Guest favorite
+                </span>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-baseline mb-1">
+                <h6 class="card-title fw-bold text-truncate mb-0" title="<%= listing.title %>"><%= listing.title %></h6>
+              </div>
+              <p class="card-subtitle text-muted small mb-1 text-truncate">
+                <%= listing.location %>, <%= listing.country %>
+              </p>
+              
+              <div class="card-price mt-1">
+                <span class="fw-bold">&#8377;<%= listing.price ? Number(listing.price).toLocaleString("en-IN") : "0" %></span>
+                <span class="night text-muted"> / night</span>
+                <i class="tax-info text-danger small fw-semibold">&nbsp;&nbsp;+18% GST (Total: &#8377;<%= listing.price ? Math.round(Number(listing.price) * 1.18).toLocaleString("en-IN") : "0" %>)</i>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% } %>
+  </div>
+<% } else { %>
+  <!-- Clean Empty State -->
+  <div class="empty-state-card text-center py-5 my-5">
+    <div class="empty-state-icon mb-3">
+      <i class="fa-solid fa-magnifying-glass text-muted opacity-50"></i>
+    </div>
+    <h4 class="fw-bold mb-2">No stays found</h4>
+    <p class="text-muted mx-auto mb-4" style="max-width: 440px;">
+      We couldn't find any properties matching your current search. Try browsing other categories or clear your search query.
+    </p>
+    <a href="/listings" class="btn btn-primary-custom rounded-pill px-4 py-2">
+      Explore All Stays
+    </a>
+  </div>
+<% } %>

@@ -1,0 +1,182 @@
+<% layout("/layouts/boilerplates") %>
+
+<div class="container my-4">
+  <!-- Host Dashboard Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <h2 class="fw-bold mb-0">Host Control Center</h2>
+        <span class="badge bg-danger-subtle text-danger fs-6 px-3 py-1 rounded-pill">
+          <i class="fa-solid fa-hotel me-1"></i>Property Owner
+        </span>
+      </div>
+      <p class="text-muted mb-0">Manage your published stays, view incoming guest reservations, and track your hosting earnings.</p>
+    </div>
+
+    <div>
+      <a href="/listings/new" class="btn btn-primary-custom rounded-pill px-4">
+        <i class="fa-solid fa-plus me-1"></i>Post New Stay
+      </a>
+    </div>
+  </div>
+
+  <!-- Host Stats Cards -->
+  <div class="row g-3 mb-5">
+    <div class="col-md-4">
+      <div class="card p-4 border rounded-4 shadow-sm bg-white h-100">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-muted small text-uppercase fw-bold">Active Listings</span>
+          <div class="bg-danger-subtle text-danger rounded-circle p-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-house-chimney"></i>
+          </div>
+        </div>
+        <h3 class="fw-bold mb-0"><%= myListings ? myListings.length : 0 %></h3>
+        <small class="text-muted">Published properties</small>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-4 border rounded-4 shadow-sm bg-white h-100">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-muted small text-uppercase fw-bold">Guest Bookings</span>
+          <div class="bg-primary-subtle text-primary rounded-circle p-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+        </div>
+        <h3 class="fw-bold mb-0"><%= incomingBookings ? incomingBookings.length : 0 %></h3>
+        <small class="text-muted">Reservations received</small>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-4 border rounded-4 shadow-sm bg-white h-100">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-muted small text-uppercase fw-bold">Total Host Revenue</span>
+          <div class="bg-success-subtle text-success rounded-circle p-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+          </div>
+        </div>
+        <h3 class="fw-bold text-success mb-0">&#8377;<%= totalEarnings ? totalEarnings.toLocaleString("en-IN") : "0" %></h3>
+        <small class="text-muted">From guest bookings</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Incoming Guest Bookings Section -->
+  <div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold mb-0"><i class="fa-solid fa-suitcase-rolling me-2 text-danger"></i>Incoming Guest Bookings</h4>
+      <span class="badge bg-light text-dark border px-3 py-2"><%= incomingBookings ? incomingBookings.length : 0 %> bookings</span>
+    </div>
+
+    <% if (incomingBookings && incomingBookings.length > 0) { %>
+      <div class="card border rounded-4 shadow-sm overflow-hidden">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light small text-uppercase text-muted">
+              <tr>
+                <th class="ps-4">Booking Ref</th>
+                <th>Property</th>
+                <th>Guest</th>
+                <th>Dates</th>
+                <th>Guests</th>
+                <th>Payout</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let booking of incomingBookings) { %>
+                <tr>
+                  <td class="ps-4 fw-bold text-danger">
+                    <%= booking.bookingReference %>
+                  </td>
+                  <td>
+                    <div class="fw-semibold text-dark"><%= booking.listing ? booking.listing.title : 'Deleted Listing' %></div>
+                    <small class="text-muted"><%= booking.listing ? booking.listing.location : '' %></small>
+                  </td>
+                  <td>
+                    <div class="fw-bold"><%= booking.guestName %></div>
+                    <small class="text-muted"><%= booking.guestEmail %> &middot; <%= booking.guestPhone || '' %></small>
+                  </td>
+                  <td>
+                    <div><%= new Date(booking.checkIn).toLocaleDateString("en-IN", { month: 'short', day: 'numeric' }) %> &rarr; <%= new Date(booking.checkOut).toLocaleDateString("en-IN", { month: 'short', day: 'numeric' }) %></div>
+                    <small class="text-muted"><%= booking.nights %> nights</small>
+                  </td>
+                  <td><%= booking.guests %></td>
+                  <td class="fw-bold text-dark">&#8377;<%= booking.basePrice ? booking.basePrice.toLocaleString("en-IN") : "0" %></td>
+                  <td>
+                    <span class="badge bg-success-subtle text-success px-2 py-1">
+                      <i class="fa-solid fa-check me-1"></i><%= booking.status %>
+                    </span>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="card p-4 border rounded-4 shadow-sm text-center py-5">
+        <i class="fa-regular fa-calendar-xmark fs-1 text-muted mb-2"></i>
+        <h6 class="fw-bold">No guest reservations yet</h6>
+        <p class="text-muted small mb-0">Once guests book your published properties, their reservation details will appear here.</p>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- My Listed Properties Section -->
+  <div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold mb-0"><i class="fa-solid fa-house-chimney me-2 text-danger"></i>My Published Stays</h4>
+      <a href="/listings/new" class="btn btn-sm btn-outline-dark rounded-pill px-3">
+        <i class="fa-solid fa-plus me-1"></i>Add Property
+      </a>
+    </div>
+
+    <% if (myListings && myListings.length > 0) { %>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <% for (let listing of myListings) { %>
+          <div class="col">
+            <div class="card listing-card h-100 border shadow-sm">
+              <div class="card-img-wrapper">
+                <img 
+                  src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=60' %>" 
+                  class="card-img-top" 
+                  alt="<%= listing.title %>"
+                >
+              </div>
+
+              <div class="card-body p-3">
+                <h6 class="card-title fw-bold text-truncate mb-1"><%= listing.title %></h6>
+                <p class="card-subtitle text-muted small mb-2"><%= listing.location %>, <%= listing.country %></p>
+                <div class="fw-bold mb-3">&#8377;<%= listing.price.toLocaleString("en-IN") %> <span class="text-muted fw-normal small">/ night</span></div>
+
+                <div class="d-flex gap-2">
+                  <a href="/listings/<%= listing._id %>/edit" class="btn btn-sm btn-outline-dark flex-grow-1 rounded-pill">
+                    <i class="fa-solid fa-pen-to-square me-1"></i>Edit
+                  </a>
+                  <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('Delete this listing?');" title="Delete">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } else { %>
+      <div class="card p-5 border rounded-4 shadow-sm text-center">
+        <i class="fa-solid fa-house-chimney-crack fs-1 text-muted mb-2"></i>
+        <h5 class="fw-bold">No properties listed yet</h5>
+        <p class="text-muted mb-3">Become a successful host by adding your first property today.</p>
+        <div class="d-inline-block">
+          <a href="/listings/new" class="btn btn-primary-custom rounded-pill px-4">
+            <i class="fa-solid fa-plus me-2"></i>List Your Property
+          </a>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>

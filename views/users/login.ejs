@@ -1,0 +1,76 @@
+<% layout("/layouts/boilerplates") %>
+
+<div class="row justify-content-center my-5">
+  <div class="col-md-6 col-lg-5">
+    <div class="form-card">
+      
+      <!-- Role Toggle Tabs -->
+      <div class="d-flex p-1 bg-light rounded-4 mb-4 border">
+        <a href="/login?role=guest" class="btn flex-grow-1 rounded-pill <%= typeof selectedRole === 'undefined' || selectedRole !== 'host' ? 'btn-white shadow-sm fw-bold bg-white text-dark' : 'text-muted' %>">
+          <i class="fa-solid fa-user me-1 text-danger"></i>Traveler Login
+        </a>
+        <a href="/login?role=host" class="btn flex-grow-1 rounded-pill <%= typeof selectedRole !== 'undefined' && selectedRole === 'host' ? 'btn-white shadow-sm fw-bold bg-white text-danger' : 'text-muted' %>">
+          <i class="fa-solid fa-hotel me-1 text-danger"></i>Host Login
+        </a>
+      </div>
+
+      <div class="text-center mb-4">
+        <div class="navbar-brand justify-content-center mb-2">
+          <i class="fa-solid fa-compass fs-1"></i>
+        </div>
+        <% if (typeof selectedRole !== 'undefined' && selectedRole === 'host') { %>
+          <h3 class="fw-bold mb-1">Host Portal Login</h3>
+          <p class="text-muted small">Log in to manage your listed properties and guest reservations</p>
+        <% } else { %>
+          <h3 class="fw-bold mb-1">Welcome back</h3>
+          <p class="text-muted small">Log in to manage your stay reservations and explore new trips</p>
+        <% } %>
+      </div>
+
+      <form action="/login" method="POST" novalidate class="needs-validation">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light"><i class="fa-solid fa-user text-muted"></i></span>
+            <input 
+              type="text" 
+              id="username" 
+              placeholder="Enter your username" 
+              name="username" 
+              class="form-control" 
+              required
+            >
+            <div class="invalid-feedback">Please enter your username.</div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light"><i class="fa-solid fa-lock text-muted"></i></span>
+            <input 
+              type="password" 
+              id="password" 
+              placeholder="Enter your password" 
+              name="password" 
+              class="form-control" 
+              required
+            >
+            <div class="invalid-feedback">Please enter your password.</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary-custom w-100 py-2 mb-3">
+          <%= (typeof selectedRole !== 'undefined' && selectedRole === 'host') ? 'Log in as Host' : 'Log in as Traveler' %>
+        </button>
+
+        <div class="text-center">
+          <span class="text-muted small">Don't have an account yet? </span>
+          <a href="/signup<%= (typeof selectedRole !== 'undefined' && selectedRole === 'host') ? '?role=host' : '?role=guest' %>" class="text-danger fw-semibold small text-decoration-none">
+            Sign up as <%= (typeof selectedRole !== 'undefined' && selectedRole === 'host') ? 'Host' : 'Traveler' %>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

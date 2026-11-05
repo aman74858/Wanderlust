@@ -1,0 +1,75 @@
+<% layout("/layouts/boilerplates") %>
+
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+      <h2 class="fw-bold mb-1">My Reservations</h2>
+      <p class="text-muted small mb-0">View all your upcoming and past stay reservations</p>
+    </div>
+    <a href="/listings" class="btn btn-primary-custom rounded-pill px-4">
+      <i class="fa-solid fa-plus me-1"></i>Book New Stay
+    </a>
+  </div>
+
+  <% if (bookings && bookings.length > 0) { %>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      <% for (let booking of bookings) { %>
+        <div class="col">
+          <div class="card p-4 border rounded-4 shadow-sm h-100">
+            <div class="d-flex gap-3 pb-3 border-bottom mb-3">
+              <img 
+                src="<%= booking.listing && booking.listing.image && booking.listing.image.url ? booking.listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=60' %>" 
+                alt="<%= booking.listing ? booking.listing.title : 'Listing' %>" 
+                class="rounded-3 shadow-sm"
+                style="width: 100px; height: 80px; object-fit: cover;"
+              >
+              <div>
+                <span class="badge bg-success-subtle text-success mb-1">
+                  <i class="fa-solid fa-circle-check me-1"></i><%= booking.status %>
+                </span>
+                <h6 class="fw-bold mb-1"><%= booking.listing ? booking.listing.title : 'Listing not available' %></h6>
+                <div class="small text-muted">
+                  <i class="fa-solid fa-receipt me-1 text-danger"></i>Ref: <b><%= booking.bookingReference %></b>
+                </div>
+              </div>
+            </div>
+
+            <div class="small text-secondary mb-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span>Check-in:</span>
+                <span class="fw-semibold text-dark"><%= new Date(booking.checkIn).toLocaleDateString("en-IN", { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Checkout:</span>
+                <span class="fw-semibold text-dark"><%= new Date(booking.checkOut).toLocaleDateString("en-IN", { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Guests & Duration:</span>
+                <span class="fw-semibold text-dark"><%= booking.guests %> guests &middot; <%= booking.nights %> nights</span>
+              </div>
+              <div class="d-flex justify-content-between pt-1 border-top mt-2">
+                <span class="fw-bold text-dark">Total Paid:</span>
+                <span class="fw-bold text-danger">&#8377;<%= booking.totalPrice ? booking.totalPrice.toLocaleString("en-IN") : "0" %></span>
+              </div>
+            </div>
+
+            <div class="mt-auto pt-2">
+              <a href="/bookings/<%= booking._id %>" class="btn btn-outline-dark w-100 rounded-pill">
+                <i class="fa-solid fa-eye me-2"></i>View Confirmation Voucher
+              </a>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="text-center py-5 my-5">
+      <div class="mb-3">
+        <i class="fa-solid fa-suitcase-rolling fs-1 text-muted opacity-50"></i>
+      </div>
+      <h4 class="fw-bold">No trips booked yet</h4>
+      <p class="text-muted">Time to dust off your bags and start planning your next getaway.</p>
+      <a href="/listings" class="btn btn-primary-custom rounded-pill px-4 mt-2">Start Searching Stays</a>
+    </div>
+  <% } %>
+</div>

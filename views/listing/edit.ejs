@@ -1,0 +1,127 @@
+<% layout("/layouts/boilerplates") %>
+
+<div class="row justify-content-center my-4">
+  <div class="col-lg-8 col-md-10">
+    <div class="form-card">
+      <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+        <div class="host-avatar me-3" style="width: 44px; height: 44px; font-size: 1.1rem;">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </div>
+        <div>
+          <h3 class="fw-bold mb-0">Edit your listing</h3>
+          <p class="text-muted small mb-0">Update listing details, pricing, or change property photos</p>
+        </div>
+      </div>
+
+      <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
+        <!-- Title -->
+        <div class="mb-3">
+          <label for="title" class="form-label">Property Title</label>
+          <input 
+            type="text" 
+            id="title" 
+            placeholder="Property Title" 
+            name="listing[title]" 
+            class="form-control" 
+            value="<%= listing.title %>" 
+            required
+          >
+          <div class="valid-feedback">Looks great!</div>
+          <div class="invalid-feedback">Please enter a valid title.</div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea 
+            id="description" 
+            name="listing[description]" 
+            class="form-control" 
+            rows="4" 
+            required
+          ><%= listing.description %></textarea>
+          <div class="invalid-feedback">Please enter a short description.</div>
+        </div>
+
+        <!-- Current Image Preview -->
+        <div class="mb-3 p-3 bg-light rounded-3 border">
+          <label class="form-label fw-bold d-block mb-2">Current Cover Image</label>
+          <img 
+            src="<%= originalImageUrl || (listing.image && listing.image.url ? listing.image.url : '') %>" 
+            alt="Current listing preview" 
+            class="rounded-3 shadow-sm" 
+            style="width: 220px; height: 140px; object-fit: cover;"
+          >
+        </div>
+
+        <!-- Upload New Image -->
+        <div class="mb-3">
+          <label for="image" class="form-label">Replace Image (optional)</label>
+          <input 
+            type="file" 
+            id="image" 
+            name="listing[image]" 
+            class="form-control"
+            accept="image/*"
+          >
+          <div class="form-text small text-muted">Leave empty to keep your existing image.</div>
+        </div>
+
+        <!-- Price and Country -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-5">
+            <label for="price" class="form-label">Price per Night (&#8377;)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0">&#8377;</span>
+              <input 
+                type="number" 
+                id="price" 
+                name="listing[price]" 
+                class="form-control border-start-0" 
+                value="<%= listing.price %>" 
+                min="100" 
+                required
+              >
+              <div class="invalid-feedback">Please enter a valid price.</div>
+            </div>
+          </div>
+
+          <div class="col-md-7">
+            <label for="country" class="form-label">Country</label>
+            <input 
+              type="text" 
+              id="country" 
+              name="listing[country]" 
+              class="form-control" 
+              value="<%= listing.country %>" 
+              required
+            >
+            <div class="invalid-feedback">Please enter a country.</div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-4">
+          <label for="location" class="form-label">Location / City</label>
+          <input 
+            type="text" 
+            id="location" 
+            name="listing[location]" 
+            class="form-control" 
+            value="<%= listing.location %>" 
+            required
+          >
+          <div class="invalid-feedback">Please enter a location.</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-dark-custom px-4 py-2">
+            <i class="fa-solid fa-check me-2"></i>Save Changes
+          </button>
+          <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary px-4 py-2 rounded-3">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

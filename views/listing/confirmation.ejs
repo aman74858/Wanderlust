@@ -1,0 +1,178 @@
+<% layout("/layouts/boilerplates") %>
+
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-9 col-md-11">
+      
+      <!-- Confirmation Header Banner -->
+      <div class="card border-0 rounded-4 shadow-sm p-4 p-md-5 mb-4 text-center text-white" style="background: var(--primary-gradient);">
+        <div class="mb-3">
+          <i class="fa-solid fa-circle-check fs-1" style="font-size: 3.5rem !important;"></i>
+        </div>
+        <h2 class="fw-bold mb-1">Reservation Confirmed!</h2>
+        <p class="mb-3 opacity-90">We've sent your itinerary and receipt to <b><%= booking.guestEmail %></b></p>
+        <div>
+          <span class="badge bg-white text-dark px-3 py-2 fs-6 rounded-pill shadow-sm">
+            <i class="fa-solid fa-receipt me-1 text-danger"></i>Booking Code: <b><%= booking.bookingReference %></b>
+          </span>
+        </div>
+      </div>
+
+      <!-- Main Voucher Card -->
+      <div class="card border rounded-4 shadow-sm p-4 p-md-5 mb-4 bg-white">
+        
+        <!-- Listing Info Header -->
+        <div class="row g-4 align-items-center pb-4 border-bottom">
+          <div class="col-md-4">
+            <img 
+              src="<%= booking.listing && booking.listing.image && booking.listing.image.url ? booking.listing.image.url : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=60' %>" 
+              alt="<%= booking.listing ? booking.listing.title : 'Listing' %>"
+              class="img-fluid rounded-4 shadow-sm w-100"
+              style="height: 180px; object-fit: cover;"
+            >
+          </div>
+          <div class="col-md-8">
+            <span class="badge bg-danger-subtle text-danger mb-2 fw-semibold px-2 py-1 rounded-2">
+              <i class="fa-solid fa-circle-check me-1"></i><%= booking.status %>
+            </span>
+            <h3 class="fw-bold mb-1"><%= booking.listing ? booking.listing.title : 'Wanderlust Stay' %></h3>
+            <p class="text-muted mb-2">
+              <i class="fa-solid fa-location-dot text-danger me-1"></i>
+              <%= booking.listing ? booking.listing.location : '' %>, <%= booking.listing ? booking.listing.country : '' %>
+            </p>
+            <div class="small text-secondary">
+              <b>Host:</b> <%= (booking.listing && booking.listing.owner) ? booking.listing.owner.username : 'Wanderlust Host' %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reservation Details Grid -->
+        <div class="row g-4 py-4 border-bottom">
+          <div class="col-sm-6 col-md-3">
+            <div class="text-muted small text-uppercase fw-bold mb-1">Check-In</div>
+            <div class="fw-bold text-dark fs-6">
+              <%= new Date(booking.checkIn).toLocaleDateString("en-IN", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %>
+            </div>
+            <small class="text-muted">From 2:00 PM</small>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="text-muted small text-uppercase fw-bold mb-1">Checkout</div>
+            <div class="fw-bold text-dark fs-6">
+              <%= new Date(booking.checkOut).toLocaleDateString("en-IN", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %>
+            </div>
+            <small class="text-muted">Until 11:00 AM</small>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="text-muted small text-uppercase fw-bold mb-1">Duration</div>
+            <div class="fw-bold text-dark fs-6">
+              <%= booking.nights %> <%= booking.nights > 1 ? 'Nights' : 'Night' %>
+            </div>
+            <small class="text-muted"><%= booking.guests %> <%= booking.guests > 1 ? 'Guests' : 'Guest' %></small>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="text-muted small text-uppercase fw-bold mb-1">Booked On</div>
+            <div class="fw-bold text-dark fs-6">
+              <%= new Date(booking.createdAt).toLocaleDateString("en-IN", { month: 'short', day: 'numeric', year: 'numeric' }) %>
+            </div>
+            <small class="text-muted">Instant Confirmation</small>
+          </div>
+        </div>
+
+        <!-- Guest & Payment Details -->
+        <div class="row g-4 py-4 border-bottom">
+          <div class="col-md-6">
+            <h6 class="fw-bold mb-3"><i class="fa-solid fa-user me-2 text-danger"></i>Guest Details</h6>
+            <div class="small">
+              <div class="d-flex mb-1">
+                <span class="text-muted" style="width: 110px;">Primary Guest:</span>
+                <span class="fw-semibold text-dark"><%= booking.guestName %></span>
+              </div>
+              <div class="d-flex mb-1">
+                <span class="text-muted" style="width: 110px;">Email:</span>
+                <span class="fw-semibold text-dark"><%= booking.guestEmail %></span>
+              </div>
+              <div class="d-flex mb-1">
+                <span class="text-muted" style="width: 110px;">Phone:</span>
+                <span class="fw-semibold text-dark"><%= booking.guestPhone || 'Not provided' %></span>
+              </div>
+              <% if (booking.specialRequests) { %>
+                <div class="d-flex mt-2">
+                  <span class="text-muted" style="width: 110px;">Notes:</span>
+                  <span class="text-secondary"><%= booking.specialRequests %></span>
+                </div>
+              <% } %>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="fw-bold mb-3"><i class="fa-solid fa-credit-card me-2 text-danger"></i>Payment Summary</h6>
+            <div class="small text-secondary">
+              <div class="d-flex justify-content-between mb-1">
+                <span>Base Rate (<%= booking.nights %> nights):</span>
+                <span class="fw-semibold text-dark">&#8377;<%= booking.basePrice ? booking.basePrice.toLocaleString("en-IN") : "0" %></span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Cleaning & Sanitization:</span>
+                <span class="fw-semibold text-dark">&#8377;<%= booking.cleaningFee.toLocaleString("en-IN") %></span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Service Fee & Support:</span>
+                <span class="fw-semibold text-dark">&#8377;<%= booking.serviceFee.toLocaleString("en-IN") %></span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>GST / Taxes (18%):</span>
+                <span class="fw-semibold text-dark">&#8377;<%= booking.tax.toLocaleString("en-IN") %></span>
+              </div>
+              <hr class="my-2">
+              <div class="d-flex justify-content-between fw-bold text-dark fs-6">
+                <span>Total Amount Paid:</span>
+                <span class="text-danger">&#8377;<%= booking.totalPrice.toLocaleString("en-IN") %></span>
+              </div>
+              <div class="text-muted small mt-1">
+                Method: <b><%= booking.paymentMethod %></b>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Check-in Guide & House Rules -->
+        <div class="py-4">
+          <h6 class="fw-bold mb-3"><i class="fa-solid fa-circle-info me-2 text-danger"></i>Important Check-in Information</h6>
+          <div class="row g-3 small text-secondary">
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 h-100">
+                <b class="text-dark d-block mb-1"><i class="fa-solid fa-key me-1"></i>Key Exchange</b>
+                Smart lock access code will be texted to your phone 2 hours prior to check-in.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 h-100">
+                <b class="text-dark d-block mb-1"><i class="fa-solid fa-ban-smoking me-1"></i>House Rules</b>
+                No smoking indoors. Quiet hours observed between 10:00 PM and 7:00 AM.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center pt-3 border-top">
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-dark rounded-pill px-4" onclick="window.print();">
+              <i class="fa-solid fa-print me-2"></i>Print Receipt
+            </button>
+            <a href="/bookings" class="btn btn-outline-secondary rounded-pill px-4">
+              <i class="fa-solid fa-list-check me-2"></i>My Bookings
+            </a>
+          </div>
+          <a href="/listings" class="btn btn-primary-custom px-4 rounded-pill">
+            <i class="fa-solid fa-compass me-2"></i>Explore More Stays
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
