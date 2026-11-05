@@ -45,15 +45,6 @@ Wanderlust is a full-stack accommodation marketplace where guests can discover a
 
 3. Create a `.env` file in the project root:
 
-   ```dotenv
-   ATLASDB_URL=mongodb+srv://<username>:<password>@<cluster>/<database>
-   SECRET=replace-with-a-long-random-secret
-   CLOUD_NAME=your-cloudinary-cloud-name
-   CLOUD_KEY=your-cloudinary-api-key
-   CLOUD_SECRET=your-cloudinary-api-secret
-   GEMINI_API_KEY=your-google-generative-ai-api-key
-   ```
-
    Use `MONGO_URI` instead of `ATLASDB_URL` if you prefer that name. For a local MongoDB instance, for example:
 
    ```dotenv
