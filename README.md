@@ -1,4 +1,7 @@
 # Wanderlust
+<img width="1917" height="868" alt="image" src="https://github.com/user-attachments/assets/6fd1165c-d6b1-434a-aae4-a2329335d069" />
+
+
 
 Wanderlust is a full-stack accommodation marketplace where guests can discover and book stays, and hosts can manage their listings. It is built with Node.js, Express, MongoDB, and server-rendered EJS views.
 
