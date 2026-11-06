@@ -21,8 +21,7 @@ const userRouter = require('./routes/user.js');
 const bookingRouter = require('./routes/booking.js');
 const chatRouter = require('./routes/chat.js');
 
-const MONGO_URI = process.env.ATLASDB_URL || process.env.MONGO_URI || "mongodb://127.0.0.1:27017/wanderlust";
-
+const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/wanderlust";
 main()
   .then(() => {
     console.log("Database connection successful");
@@ -100,5 +99,5 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running at http://localhost:${PORT}/listings`);
 });
