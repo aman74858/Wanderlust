@@ -1,93 +1,199 @@
-# Wanderlust
+# 🌍 Wanderlust
 
-Wanderlust is a full-stack accommodation marketplace where guests can discover and book stays, and hosts can manage their listings. It is built with Node.js, Express, MongoDB, and server-rendered EJS views.
+### Explore Places, Discover Stays, and Share Travel Experiences.
 
-## Features
+Wanderlust is a full-stack accommodation marketplace where guests can discover and book stays, while hosts can create and manage their property listings. Built using Node.js, Express.js, MongoDB, and EJS, it provides a user-friendly platform for exploring travel destinations and managing accommodation bookings.
 
-- Browse accommodation listings and view listing details
-- Create an account, sign in, and switch between guest and host roles
-- Create, edit, and delete host listings
-- Upload listing images to Cloudinary
-- Book stays and view booking confirmations and booking history
-- Leave reviews on listings
-- Ask the Wanderlust AI chat agent travel and listing questions
+## 📸 Project Preview
 
-## Tech stack
+<img width="100%" alt="Wanderlust Homepage" src="https://github.com/user-attachments/assets/6fd1165c-d6b1-434a-aae4-a2329335d069" />
 
-- **Server:** Node.js and Express 5
-- **Views:** EJS and EJS-Mate
-- **Database:** MongoDB with Mongoose
-- **Authentication:** Passport Local and Passport Local Mongoose
-- **Uploads:** Multer and Cloudinary
-- **AI chat:** Google Generative AI
+## ✨ Features
 
-## Prerequisites
+- 🏡 **Browse Listings:** Explore accommodation listings and view detailed property information.
+- 🔐 **User Authentication:** Register, log in, and securely manage user accounts.
+- 👤 **User Roles:** Support for guest and host roles.
+- ➕ **Listing Management:** Hosts can create, edit, and delete property listings.
+- 🖼️ **Image Uploads:** Upload and manage listing images using Cloudinary.
+- 📅 **Booking System:** Book stays and view booking confirmations and history.
+- ⭐ **Reviews & Ratings:** Share experiences through listing reviews.
+- 🤖 **AI Chat Assistant:** Ask travel-related and listing questions using the AI chat agent.
 
-- Node.js 16.13 or later and npm
-- A MongoDB database (local MongoDB or MongoDB Atlas)
-- A Cloudinary account for listing image uploads
-- A Google Generative AI API key for AI chat
+## 🛠️ Tech Stack
 
-## Getting started
+| Technology | Purpose |
+|---|---|
+| Node.js | Backend runtime |
+| Express.js 5 | Server and routing |
+| EJS | Server-side rendering |
+| EJS-Mate | EJS layouts and templates |
+| MongoDB | Database |
+| Mongoose | Database modeling |
+| Passport.js | Authentication |
+| Passport Local Mongoose | User authentication |
+| Multer | File uploads |
+| Cloudinary | Image storage |
+| Google Generative AI | AI chat assistant |
+| Bootstrap / CSS | User interface |
 
-1. Clone the repository and enter the project directory:
+## 📋 Prerequisites
 
-   ```bash
-   git clone https://github.com/aman74858/Wanderlust.git
-   cd Wanderlust
-   ```
+Before running the project, install:
 
-2. Install dependencies:
+- Node.js (16.13 or later)
+- npm
+- MongoDB or MongoDB Atlas account
+- Cloudinary account
+- Google Generative AI API key
 
-   ```bash
-   npm install
-   ```
+## 🚀 Installation and Setup
 
-3. Create a `.env` file in the project root:
+### 1. Clone the repository
 
-   ```dotenv
-   ATLASDB_URL=mongodb+srv://<username>:<password>@<cluster>/<database>
-   SECRET=replace-with-a-long-random-secret
-   CLOUD_NAME=your-cloudinary-cloud-name
-   CLOUD_KEY=your-cloudinary-api-key
-   CLOUD_SECRET=your-cloudinary-api-secret
-   GEMINI_API_KEY=your-google-generative-ai-api-key
-   ```
-
-   Use `MONGO_URI` instead of `ATLASDB_URL` if you prefer that name. For a local MongoDB instance, for example:
-
-   ```dotenv
-   MONGO_URI=mongodb://127.0.0.1:27017/wanderlust
-   ```
-
-   Keep `.env` private; never commit real credentials. Cloudinary credentials are needed for listing image uploads, and `GEMINI_API_KEY` is needed for AI chat.
-
-4. Start the server:
-
-   ```bash
-   node app.js
-   ```
-
-   Open [http://localhost:8080](http://localhost:8080). The server uses the `PORT` environment variable when provided, and otherwise listens on port `8080`.
-
-## Project structure
-
-```text
-controllers/  Request handlers for listings, users, bookings, reviews, and chat
-models/       Mongoose models
-routes/       Express route definitions
-services/     AI chat and application services
-views/        EJS page templates and shared layout partials
-public/       Stylesheets and browser-side JavaScript
-utils/        Shared utilities and error handling
-app.js        Express application entry point
-cloudConfig.js Cloudinary upload configuration
+```bash
+git clone https://github.com/aman74858/Wanderlust.git
 ```
 
-## Deployment
+### 2. Navigate to the project folder
 
-Wanderlust is a server-rendered Node.js application and requires a running server and MongoDB database; GitHub Pages cannot host the application backend. Deploy it to a Node.js hosting service and configure the environment variables from the setup section in that service's settings. Set `PORT` only if your hosting provider requires it.
+```bash
+cd Wanderlust
+```
 
-## Tests
+### 3. Install dependencies
 
-No automated test suite is configured yet. The current `npm test` script is a placeholder and exits with an error.
+```bash
+npm install
+```
+
+### 4. Configure environment variables
+
+Create a `.env` file in the root directory.
+
+```env
+PORT=8080
+NODE_ENV=development
+
+MONGODB_URI=your_mongodb_connection_string
+
+SECRET=your_session_secret
+
+CLOUD_NAME=your_cloudinary_cloud_name
+CLOUD_API_KEY=your_cloudinary_api_key
+CLOUD_API_SECRET=your_cloudinary_api_secret
+
+GEMINI_API_KEY=your_google_generative_ai_api_key
+```
+
+Replace the placeholder values with your actual credentials.
+
+**Important:** Never upload your `.env` file or expose API keys, passwords, or database credentials on GitHub.
+
+### 5. Start the application
+
+```bash
+npm start
+```
+
+Or run directly:
+
+```bash
+node app.js
+```
+
+Open your browser:
+
+```text
+http://localhost:8080
+```
+
+## 📁 Project Structure
+
+```text
+Wanderlust/
+│
+├── controllers/
+│   ├── listing.js
+│   ├── user.js
+│   ├── review.js
+│   ├── booking.js
+│   └── chat.js
+│
+├── models/
+│   ├── listing.js
+│   ├── user.js
+│   ├── review.js
+│   └── booking.js
+│
+├── routes/
+│   ├── listing.js
+│   ├── user.js
+│   ├── review.js
+│   ├── booking.js
+│   └── chat.js
+│
+├── views/
+│   ├── layouts/
+│   ├── listings/
+│   ├── users/
+│   └── includes/
+│
+├── public/
+│   ├── css/
+│   └── js/
+│
+├── utils/
+├── services/
+├── app.js
+├── cloudConfig.js
+├── package.json
+├── package-lock.json
+└── .gitignore
+```
+
+*Note: This structure represents the main project areas; actual filenames and folders may vary.*
+
+## ☁️ Deployment
+
+Wanderlust can be deployed using **Render** with MongoDB Atlas.
+
+### Deployment configuration
+
+| Setting | Value |
+|---|---|
+| Hosting | Render Web Service |
+| Repository | GitHub |
+| Runtime | Node.js |
+| Build Command | `npm install` |
+| Start Command | `npm start` |
+| Database | MongoDB Atlas |
+
+Configure the required environment variables in Render's Environment settings.
+
+## 🧪 Testing
+
+Automated tests are not configured yet. The project can currently be tested manually by checking registration, login, listing management, image uploads, bookings, reviews, and AI chat functionality.
+
+## 🔮 Future Improvements
+
+- Online payment integration
+- Advanced search and filtering
+- Interactive maps and location-based search
+- Improved booking management
+- More AI-powered travel recommendations
+
+## 👨‍💻 Author
+
+**Mohammad Aman**
+
+B.Tech Computer Science & Engineering
+
+- GitHub: [@aman74858](https://github.com/aman74858)
+
+## 📄 License
+
+This project is developed for educational and portfolio purposes.
+
+---
+
+⭐ If you like this project, consider giving it a star on GitHub!
