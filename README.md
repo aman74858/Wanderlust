@@ -7,7 +7,7 @@ Wanderlust is a full-stack accommodation marketplace where guests can discover a
 ## 📸 Project Preview
 
 <img width="100%" alt="Wanderlust Homepage" src="https://github.com/user-attachments/assets/6fd1165c-d6b1-434a-aae4-a2329335d069" />
-<a> https://wanderlust-le4az2lqh-a-261c.vercel.app/listings </a>
+
 ## ✨ Features
 
 - 🏡 **Browse Listings:** Explore accommodation listings and view detailed property information.
