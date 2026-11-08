@@ -20,6 +20,7 @@ const reviewRouter = require('./routes/review.js');
 const userRouter = require('./routes/user.js');
 const bookingRouter = require('./routes/booking.js');
 const chatRouter = require('./routes/chat.js');
+const { isLoggedIn } = require("./middleware.js");
 
 const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/wanderlust";
 main()
