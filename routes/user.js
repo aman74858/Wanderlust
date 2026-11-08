@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 const wrapAsync = require('../utils/wrapAsync.js');
 const passport = require('passport');
-const { saveRedirectUrl, isLoggedIn } = require('../middleware.js');
+const { saveRedirectUrl, isLoggedIn } = require('../authMiddleware.js');
 const userController = require('../controllers/users.js');
 
 // Signup routes
