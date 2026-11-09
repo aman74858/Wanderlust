@@ -100,6 +100,7 @@
                 name="booking[guestPhone]" 
                 class="form-control" 
                 placeholder="+91 98765 43210" 
+                value="<%= currUser && currUser.phone ? currUser.phone : '' %>"
                 required
               >
               <div class="invalid-feedback">Please enter a valid phone number.</div>
@@ -251,7 +252,7 @@
 <script>
   // Real-time calculation script for reservation dates
   document.addEventListener('DOMContentLoaded', () => {
-    const pricePerNight = <%= listing.price %>;
+    const pricePerNight = <%- JSON.stringify(listing.price) %>;
     const checkInInput = document.getElementById('checkIn');
     const checkOutInput = document.getElementById('checkOut');
     const summaryNights = document.getElementById('summaryNights');
