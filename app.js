@@ -22,7 +22,11 @@ const bookingRouter = require('./routes/booking.js');
 const chatRouter = require('./routes/chat.js');
 const { isLoggedIn } = require("./authMiddleware.js");
 
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URI =
+  process.env.MONGODB_URI ||
+  process.env.ATLASDB_URL ||
+  process.env.MONGO_URI ||
+  "mongodb://127.0.0.1:27017/wanderlust";
 main()
   .then(() => {
     console.log("Database connection successful");
