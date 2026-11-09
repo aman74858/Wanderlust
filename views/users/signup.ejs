@@ -87,9 +87,13 @@
               placeholder="Create a strong password" 
               name="password" 
               class="form-control" 
+              minlength="6"
               required
             >
-            <div class="invalid-feedback">Please create a password.</div>
+            <button class="btn btn-outline-secondary border-start-0 bg-light" type="button" id="toggleSignupPasswordBtn" title="Toggle password visibility">
+              <i class="fa-regular fa-eye text-muted" id="toggleSignupPasswordIcon"></i>
+            </button>
+            <div class="invalid-feedback">Please enter a password with at least 6 characters.</div>
           </div>
         </div>
 
@@ -107,3 +111,20 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("toggleSignupPasswordBtn");
+    const passwordInput = document.getElementById("password");
+    const toggleIcon = document.getElementById("toggleSignupPasswordIcon");
+
+    if (toggleBtn && passwordInput && toggleIcon) {
+      toggleBtn.addEventListener("click", () => {
+        const isPassword = passwordInput.getAttribute("type") === "password";
+        passwordInput.setAttribute("type", isPassword ? "text" : "password");
+        toggleIcon.classList.toggle("fa-eye", !isPassword);
+        toggleIcon.classList.toggle("fa-eye-slash", isPassword);
+      });
+    }
+  });
+</script>

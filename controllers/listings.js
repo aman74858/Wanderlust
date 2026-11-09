@@ -18,6 +18,7 @@ module.exports.index = async (req, res) => {
   } else if (category && category.trim() && category !== 'Trending') {
     const catRegex = new RegExp(category.trim(), 'i');
     filter.$or = [
+      { category: catRegex },
       { title: catRegex },
       { description: catRegex },
       { location: catRegex },
@@ -33,24 +34,48 @@ module.exports.new = async (req, res) => {
   res.render('listing/new.ejs');
 };
 
+// Helper to extract all uploaded photo files from multer
+function getUploadedFiles(req) {
+  const files = [];
+  if (Array.isArray(req.files)) {
+    files.push(...req.files);
+  } else if (req.files && typeof req.files === 'object') {
+    if (req.files['listing[images]']) files.push(...req.files['listing[images]']);
+    if (req.files['listing[image]']) files.push(...req.files['listing[image]']);
+    if (req.files['images']) files.push(...req.files['images']);
+    if (req.files['image']) files.push(...req.files['image']);
+  } else if (req.file) {
+    files.push(req.file);
+  }
+  return files;
+}
+
 module.exports.create = async (req, res) => {
   const newListing = new Listing(req.body.listing);
   newListing.owner = req.user._id;
 
-  if (req.file) {
-    newListing.image = {
-      url: req.file.path,
-      filename: req.file.filename
-    };
+  const uploadedFiles = getUploadedFiles(req);
+
+  if (uploadedFiles.length > 0) {
+    const photoObjects = uploadedFiles.map((f) => ({
+      url: f.path,
+      filename: f.filename,
+    }));
+    newListing.images = photoObjects;
+    newListing.image = photoObjects[0]; // Set primary cover image
   } else if (!newListing.image || !newListing.image.url) {
     newListing.image = {
       url: DEFAULT_IMAGE,
-      filename: 'default-image'
+      filename: 'default-image',
     };
+    newListing.images = [newListing.image];
+  } else if (newListing.image && (!newListing.images || newListing.images.length === 0)) {
+    newListing.images = [newListing.image];
   }
 
   await newListing.save();
-  req.flash('success', 'New Listing Created!');
+  const photoCount = newListing.images ? newListing.images.length : 1;
+  req.flash('success', `🎉 New Listing Created with ${photoCount} photo${photoCount > 1 ? 's' : ''}!`);
   res.redirect('/listings');
 };
 
@@ -98,11 +123,14 @@ module.exports.update = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }, { new: true, runValidators: true });
 
-  if (req.file) {
-    listing.image = {
-      url: req.file.path,
-      filename: req.file.filename
-    };
+  const uploadedFiles = getUploadedFiles(req);
+  if (uploadedFiles.length > 0) {
+    const photoObjects = uploadedFiles.map((f) => ({
+      url: f.path,
+      filename: f.filename,
+    }));
+    listing.images = photoObjects;
+    listing.image = photoObjects[0];
     await listing.save();
   }
 

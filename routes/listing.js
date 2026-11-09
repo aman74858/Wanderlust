@@ -8,12 +8,18 @@ const multer = require('multer');
 const { storage } = require('../cloudConfig.js');
 const upload = multer({ storage });
 
+// Multer middleware supporting multiple property photos (up to 10 photos)
+const uploadListingPhotos = upload.fields([
+  { name: 'listing[images]', maxCount: 10 },
+  { name: 'listing[image]', maxCount: 10 },
+]);
+
 // Index Route and Create Route (Create is Host only)
 router.route('/')
   .get(wrapAsync(listingControllers.index))
   .post(
     isHost,
-    upload.single("listing[image]"),
+    uploadListingPhotos,
     validateListing,
     wrapAsync(listingControllers.create)
   );
@@ -29,7 +35,7 @@ router
   .put(
     isLoggedIn,
     isOwner,
-      upload.single("listing[image]"),
+    uploadListingPhotos,
     validateListing, wrapAsync(listingControllers.update))
   .delete(isLoggedIn,isOwner, wrapAsync(listingControllers.delete));
 // Edit Route

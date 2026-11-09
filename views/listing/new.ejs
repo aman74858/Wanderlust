@@ -1,5 +1,34 @@
 <% layout("/layouts/boilerplates") %>
 
+<style>
+  .category-choice-card {
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: #ffffff;
+    user-select: none;
+    min-height: 86px;
+    border: 1.5px solid #e2e8f0 !important;
+  }
+  .category-choice-card:hover {
+    border-color: #fe424d !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(254, 66, 77, 0.12);
+  }
+  .category-choice-card.active {
+    border-color: #fe424d !important;
+    background-color: #fff1f2 !important;
+    box-shadow: 0 0 0 1px #fe424d;
+  }
+  .category-choice-card.active span {
+    color: #e00b41 !important;
+    font-weight: 700 !important;
+  }
+  .category-choice-card.active i {
+    color: #fe424d !important;
+    transform: scale(1.15);
+  }
+</style>
+
 <div class="row justify-content-center my-4">
   <div class="col-lg-8 col-md-10">
     <div class="form-card">
@@ -29,6 +58,91 @@
           <div class="invalid-feedback">Please enter a catchy title for your listing.</div>
         </div>
 
+        <!-- Property Category Selection -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="form-label mb-0 fw-semibold">
+              <i class="fa-solid fa-icons text-danger me-1"></i>Property Category
+            </label>
+            <span class="badge bg-light text-muted border small">Select one</span>
+          </div>
+          <p class="text-muted small mb-2">Choose the category that best matches your stay so guests can discover it easily.</p>
+
+          <!-- Visual Category Selector Grid -->
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-2" id="categoryPickerGrid">
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Rooms" class="d-none category-radio" checked required>
+                <i class="fa-solid fa-bed fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Rooms</span>
+              </label>
+            </div>
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Iconic Cities" class="d-none category-radio">
+                <i class="fa-solid fa-mountain-city fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Iconic Cities</span>
+              </label>
+            </div>
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Mountains" class="d-none category-radio">
+                <i class="fa-solid fa-mountain fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Mountains</span>
+              </label>
+            </div>
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Castles" class="d-none category-radio">
+                <i class="fa-brands fa-fort-awesome fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Castles</span>
+              </label>
+            </div>
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Amazing Pools" class="d-none category-radio">
+                <i class="fa-solid fa-person-swimming fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Pools</span>
+              </label>
+            </div>
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Camping" class="d-none category-radio">
+                <i class="fa-solid fa-campground fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Camping</span>
+              </label>
+            </div>
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Farms" class="d-none category-radio">
+                <i class="fa-solid fa-cow fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Farms</span>
+              </label>
+            </div>
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Arctic" class="d-none category-radio">
+                <i class="fa-regular fa-snowflake fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Arctic</span>
+              </label>
+            </div>
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Beachfront" class="d-none category-radio">
+                <i class="fa-solid fa-umbrella-beach fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Beachfront</span>
+              </label>
+            </div>
+            <div class="col">
+              <label class="category-choice-card w-100 p-2 text-center rounded-3 d-flex flex-column align-items-center justify-content-center cursor-pointer h-100">
+                <input type="radio" name="listing[category]" value="Boats" class="d-none category-radio">
+                <i class="fa-solid fa-sailboat fs-4 mb-1 text-secondary"></i>
+                <span class="small fw-semibold text-dark">Boats</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
         <!-- Description -->
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
@@ -43,17 +157,30 @@
           <div class="invalid-feedback">Please provide a brief description of the place.</div>
         </div>
 
-        <!-- Image Upload -->
-        <div class="mb-3">
-          <label for="image" class="form-label">Upload Listing Image</label>
+        <!-- Multiple Photos Upload -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label for="images" class="form-label mb-0 fw-semibold">
+              <i class="fa-solid fa-images text-danger me-1"></i>Upload Property Photos
+            </label>
+            <span class="badge bg-light text-dark border small" id="photoCountBadge">
+              <i class="fa-solid fa-camera me-1"></i>Multiple photos allowed (up to 10)
+            </span>
+          </div>
+          <p class="text-muted small mb-2">Showcase your bedrooms, living area, kitchen, views, and bathrooms. The first photo will be your stay's main cover photo.</p>
           <input 
             type="file" 
-            id="image" 
-            name="listing[image]" 
+            id="images" 
+            name="listing[images]" 
             class="form-control"
             accept="image/*"
+            multiple
           >
-          <div class="form-text small text-muted">High quality JPG, PNG, or WEBP photos work best.</div>
+          <div class="form-text small text-muted">You can select multiple photos at once. Supported formats: JPG, PNG, WEBP.</div>
+          
+          <!-- Live Preview Container for selected photos -->
+          <div id="photosPreviewContainer" class="row row-cols-3 row-cols-sm-4 row-cols-md-5 g-2 mt-2 d-none">
+          </div>
         </div>
 
         <!-- Price and Country in a row -->
@@ -114,3 +241,70 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".category-choice-card");
+
+    function updateActiveCategory() {
+      cards.forEach((card) => {
+        const radio = card.querySelector(".category-radio");
+        if (radio && radio.checked) {
+          card.classList.add("active");
+        } else {
+          card.classList.remove("active");
+        }
+      });
+    }
+
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const radio = card.querySelector(".category-radio");
+        if (radio) {
+          radio.checked = true;
+          updateActiveCategory();
+        }
+      });
+    });
+
+    updateActiveCategory();
+
+    // Live Multiple Photos Preview
+    const imageInput = document.getElementById("images");
+    const previewContainer = document.getElementById("photosPreviewContainer");
+    const photoCountBadge = document.getElementById("photoCountBadge");
+
+    if (imageInput && previewContainer) {
+      imageInput.addEventListener("change", (e) => {
+        previewContainer.innerHTML = "";
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          previewContainer.classList.remove("d-none");
+          photoCountBadge.innerHTML = `<i class="fa-solid fa-check text-success me-1"></i>${files.length} photo${files.length > 1 ? 's' : ''} selected`;
+          photoCountBadge.className = "badge bg-success-subtle text-success border border-success-subtle small";
+
+          files.forEach((file, idx) => {
+            if (!file.type.startsWith("image/")) return;
+            const col = document.createElement("div");
+            col.className = "col";
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              col.innerHTML = `
+                <div class="position-relative border rounded-3 overflow-hidden shadow-sm" style="height: 80px;">
+                  <img src="${event.target.result}" style="width: 100%; height: 100%; object-fit: cover;" alt="Preview">
+                  ${idx === 0 ? '<span class="badge bg-dark position-absolute bottom-0 start-0 m-1" style="font-size: 0.65rem;">Cover</span>' : ''}
+                </div>
+              `;
+            };
+            reader.readAsDataURL(file);
+            previewContainer.appendChild(col);
+          });
+        } else {
+          previewContainer.classList.add("d-none");
+          photoCountBadge.innerHTML = `<i class="fa-solid fa-camera me-1"></i>Multiple photos allowed (up to 10)`;
+          photoCountBadge.className = "badge bg-light text-dark border small";
+        }
+      });
+    }
+  });
+</script>

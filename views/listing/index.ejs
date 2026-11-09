@@ -122,6 +122,15 @@
                 <i class="fa-regular fa-heart"></i>
               </button>
 
+              <!-- Photo Count Badge (for stays with multiple photos) -->
+              <% if (listing.images && listing.images.length > 1) { %>
+                <div class="position-absolute top-0 start-0 m-2">
+                  <span class="badge bg-dark bg-opacity-75 text-white shadow-sm px-2 py-1 rounded-pill" style="font-size: 0.72rem;">
+                    <i class="fa-solid fa-images me-1"></i><%= listing.images.length %>
+                  </span>
+                </div>
+              <% } %>
+
               <!-- Guest Favorite Badge -->
               <div class="card-badge-container">
                 <span class="guest-favorite-badge">
@@ -136,6 +145,9 @@
               </div>
               <p class="card-subtitle text-muted small mb-1 text-truncate">
                 <%= listing.location %>, <%= listing.country %>
+                <% if (listing.category) { %>
+                  &middot; <span class="text-secondary"><%= listing.category %></span>
+                <% } %>
               </p>
               
               <div class="card-price mt-1">

@@ -764,7 +764,12 @@
                   alt="<%= listing.title %>"
                   style="height: 200px; object-fit: cover;"
                 >
-                <div class="position-absolute top-0 end-0 m-2">
+                <div class="position-absolute top-0 end-0 m-2 d-flex gap-1">
+                  <% if (listing.images && listing.images.length > 1) { %>
+                    <span class="badge bg-dark bg-opacity-75 text-white shadow-sm px-2 py-1 rounded-pill" style="font-size: 0.72rem;">
+                      <i class="fa-solid fa-images me-1"></i><%= listing.images.length %> photos
+                    </span>
+                  <% } %>
                   <span class="badge bg-white text-dark shadow-sm px-2 py-1 rounded-pill">
                     <i class="fa-solid fa-check text-success me-1"></i>Active
                   </span>
@@ -776,6 +781,9 @@
                   <h6 class="card-title fw-bold text-truncate mb-1"><%= listing.title %></h6>
                   <p class="card-subtitle text-muted small mb-2">
                     <i class="fa-solid fa-location-dot me-1 text-danger"></i><%= listing.location %>, <%= listing.country %>
+                    <% if (listing.category) { %>
+                      &middot; <span class="badge bg-light text-dark border fw-normal"><%= listing.category %></span>
+                    <% } %>
                   </p>
                   <div class="fw-bold text-dark mb-3">
                     &#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %> 

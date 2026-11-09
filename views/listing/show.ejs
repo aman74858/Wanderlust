@@ -11,6 +11,12 @@
         <span class="text-decoration-underline fw-semibold"><%= listing.reviews ? listing.reviews.length : 0 %> reviews</span>
         &middot;
         <span><i class="fa-solid fa-location-dot me-1 text-danger"></i><%= listing.location %>, <%= listing.country %></span>
+        <% if (listing.category) { %>
+          &middot;
+          <a href="/listings?category=<%= encodeURIComponent(listing.category) %>" class="badge bg-light text-dark border px-2 py-1 text-decoration-none">
+            <i class="fa-solid fa-tag text-danger me-1"></i><%= listing.category %>
+          </a>
+        <% } %>
       </div>
       <div class="d-none d-md-flex gap-3">
         <button class="btn btn-sm btn-outline-dark rounded-pill px-3" type="button"><i class="fa-solid fa-arrow-up-from-bracket me-1"></i>Share</button>
@@ -19,14 +25,135 @@
     </div>
   </div>
 
-  <!-- Hero Image -->
-  <div class="show-image-container">
-    <img
-      src="<%= listing.image && listing.image.url ? listing.image.url : (originalImageUrl || 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') %>"
-      class="show-image"
-      alt="<%= listing.title %>"
-    >
-  </div>
+<style>
+  .photo-gallery-mosaic {
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: #0f172a;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  .gallery-tile-main {
+    height: 420px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .gallery-tile-sub {
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .gallery-img {
+    transition: transform 0.4s ease, opacity 0.2s ease;
+  }
+  .gallery-tile-main:hover .gallery-img,
+  .gallery-tile-sub:hover .gallery-img {
+    transform: scale(1.03);
+    opacity: 0.94;
+  }
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  .modal-gallery-img {
+    max-height: 72vh;
+    object-fit: contain;
+    width: 100%;
+  }
+  .filmstrip-thumb {
+    width: 64px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+  }
+  .filmstrip-thumb.active,
+  .filmstrip-thumb:hover {
+    opacity: 1;
+    border-color: #fe424d;
+    transform: scale(1.05);
+  }
+  @media (max-width: 768px) {
+    .gallery-tile-main {
+      height: 280px;
+    }
+  }
+</style>
+
+  <!-- Photo Gallery / Hero Display -->
+  <% 
+    const allPhotos = (listing.images && listing.images.length > 0) 
+      ? listing.images 
+      : (listing.image && listing.image.url ? [listing.image] : [{ url: (originalImageUrl || 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') }]);
+  %>
+
+  <% if (allPhotos.length > 1) { %>
+    <!-- Multi-Photo Gallery Mosaic -->
+    <div class="position-relative mb-4">
+      <div class="photo-gallery-mosaic">
+        <div class="row g-2">
+          <!-- Main Large Photo (Left Column) -->
+          <div class="<%= allPhotos.length >= 3 ? 'col-md-7 col-12' : 'col-md-6 col-12' %>">
+            <div class="gallery-tile-main h-100 position-relative cursor-pointer" data-bs-toggle="modal" data-bs-target="#galleryModal" data-photo-idx="0">
+              <img src="<%= allPhotos[0].url %>" alt="<%= listing.title %> main photo" class="w-100 h-100 object-fit-cover gallery-img">
+            </div>
+          </div>
+
+          <!-- Secondary Grid (Right Column) -->
+          <div class="<%= allPhotos.length >= 3 ? 'col-md-5 col-12' : 'col-md-6 col-12' %>">
+            <% if (allPhotos.length >= 5) { %>
+              <!-- 4 photo grid -->
+              <div class="row g-2 h-100">
+                <% for (let i = 1; i <= 4; i++) { %>
+                  <div class="col-6">
+                    <div class="gallery-tile-sub cursor-pointer" data-bs-toggle="modal" data-bs-target="#galleryModal" data-photo-idx="<%= i %>" style="height: 206px;">
+                      <img src="<%= allPhotos[i].url %>" alt="Photo <%= i + 1 %>" class="w-100 h-100 object-fit-cover gallery-img">
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+            <% } else if (allPhotos.length >= 3) { %>
+              <!-- 2 photos stacked -->
+              <div class="row g-2 h-100">
+                <% for (let i = 1; i < Math.min(3, allPhotos.length); i++) { %>
+                  <div class="col-12">
+                    <div class="gallery-tile-sub cursor-pointer" data-bs-toggle="modal" data-bs-target="#galleryModal" data-photo-idx="<%= i %>" style="height: 206px;">
+                      <img src="<%= allPhotos[i].url %>" alt="Photo <%= i + 1 %>" class="w-100 h-100 object-fit-cover gallery-img">
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+            <% } else { %>
+              <!-- 1 photo on right side -->
+              <div class="gallery-tile-sub h-100 cursor-pointer" data-bs-toggle="modal" data-bs-target="#galleryModal" data-photo-idx="1" style="min-height: 420px;">
+                <img src="<%= allPhotos[1].url %>" alt="Photo 2" class="w-100 h-100 object-fit-cover gallery-img">
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating "Show all photos" Button -->
+      <button type="button" class="btn btn-white bg-white text-dark shadow-sm border rounded-pill px-3 py-2 position-absolute bottom-0 end-0 m-3 fw-semibold small" data-bs-toggle="modal" data-bs-target="#galleryModal">
+        <i class="fa-solid fa-grip-vertical me-2 text-danger"></i>Show all <%= allPhotos.length %> photos
+      </button>
+    </div>
+  <% } else { %>
+    <!-- Single Hero Image Display -->
+    <div class="show-image-container position-relative">
+      <img
+        src="<%= allPhotos[0].url %>"
+        class="show-image"
+        alt="<%= listing.title %>"
+        style="cursor: pointer;"
+        data-bs-toggle="modal"
+        data-bs-target="#galleryModal"
+      >
+      <button type="button" class="btn btn-white bg-white text-dark shadow-sm border rounded-pill px-3 py-2 position-absolute bottom-0 end-0 m-3 fw-semibold small" data-bs-toggle="modal" data-bs-target="#galleryModal">
+        <i class="fa-solid fa-expand me-1"></i>View Fullscreen
+      </button>
+    </div>
+  <% } %>
 
   <!-- Content Grid: Details (Left) & Booking Card (Right) -->
   <div class="row g-5">
@@ -292,3 +419,111 @@
     </div>
   </div>
 </div>
+
+<!-- Fullscreen Photo Gallery Lightbox Modal -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-lg-down">
+    <div class="modal-content bg-dark text-white border-0 rounded-4 overflow-hidden shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header border-secondary px-4 py-3 bg-black d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="modal-title fw-bold mb-0 text-white" id="galleryModalLabel">
+            <i class="fa-solid fa-camera-retro text-danger me-2"></i><%= listing.title %>
+          </h5>
+          <small class="text-secondary">
+            Photo <span id="galleryCounter" class="fw-bold text-white">1</span> of <b><%= allPhotos.length %></b>
+          </small>
+        </div>
+        <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body: Carousel -->
+      <div class="modal-body p-0 bg-black position-relative d-flex align-items-center justify-content-center" style="min-height: 480px;">
+        <div id="listingGalleryCarousel" class="carousel slide w-100" data-bs-ride="false" data-bs-interval="false">
+          <div class="carousel-inner text-center">
+            <% allPhotos.forEach((photo, idx) => { %>
+              <div class="carousel-item <%= idx === 0 ? 'active' : '' %>" data-slide-number="<%= idx + 1 %>">
+                <img src="<%= photo.url %>" class="modal-gallery-img" alt="<%= listing.title %> photo <%= idx + 1 %>">
+              </div>
+            <% }); %>
+          </div>
+
+          <!-- Carousel Next / Prev Controls -->
+          <% if (allPhotos.length > 1) { %>
+            <button class="carousel-control-prev" type="button" data-bs-target="#listingGalleryCarousel" data-bs-slide="prev" aria-label="Previous">
+              <span class="carousel-control-prev-icon p-3 bg-dark bg-opacity-75 rounded-circle" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#listingGalleryCarousel" data-bs-slide="next" aria-label="Next">
+              <span class="carousel-control-next-icon p-3 bg-dark bg-opacity-75 rounded-circle" aria-hidden="true"></span>
+            </button>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Modal Footer: Filmstrip Thumbnails -->
+      <% if (allPhotos.length > 1) { %>
+        <div class="modal-footer border-secondary px-4 py-2 bg-black justify-content-center">
+          <div class="d-flex gap-2 overflow-x-auto py-1" style="max-width: 100%;">
+            <% allPhotos.forEach((photo, idx) => { %>
+              <img 
+                src="<%= photo.url %>" 
+                class="filmstrip-thumb <%= idx === 0 ? 'active' : '' %>" 
+                data-target-slide="<%= idx %>" 
+                alt="Thumbnail <%= idx + 1 %>"
+              >
+            <% }); %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const galleryCarousel = document.getElementById("listingGalleryCarousel");
+    const galleryCounter = document.getElementById("galleryCounter");
+    const filmstripThumbs = document.querySelectorAll(".filmstrip-thumb");
+    const galleryModal = document.getElementById("galleryModal");
+
+    if (galleryCarousel && galleryCounter) {
+      galleryCarousel.addEventListener("slid.bs.carousel", (e) => {
+        const activeItem = e.relatedTarget;
+        const slideNum = activeItem.getAttribute("data-slide-number") || 1;
+        galleryCounter.textContent = slideNum;
+
+        // Update active filmstrip thumbnail
+        const activeIdx = parseInt(slideNum) - 1;
+        filmstripThumbs.forEach((thumb, idx) => {
+          if (idx === activeIdx) {
+            thumb.classList.add("active");
+            thumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+          } else {
+            thumb.classList.remove("active");
+          }
+        });
+      });
+
+      // Click on filmstrip thumbnail jumps to slide
+      filmstripThumbs.forEach((thumb) => {
+        thumb.addEventListener("click", () => {
+          const targetSlide = parseInt(thumb.getAttribute("data-target-slide"));
+          const carouselInstance = bootstrap.Carousel.getOrCreateInstance(galleryCarousel);
+          carouselInstance.to(targetSlide);
+        });
+      });
+    }
+
+    // When clicking any tile in the mosaic, open modal at that specific photo
+    const mosaicTiles = document.querySelectorAll("[data-photo-idx]");
+    mosaicTiles.forEach((tile) => {
+      tile.addEventListener("click", () => {
+        const photoIdx = parseInt(tile.getAttribute("data-photo-idx")) || 0;
+        if (galleryCarousel) {
+          const carouselInstance = bootstrap.Carousel.getOrCreateInstance(galleryCarousel);
+          carouselInstance.to(photoIdx);
+        }
+      });
+    });
+  });
+</script>

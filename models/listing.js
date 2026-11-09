@@ -14,9 +14,31 @@ const listingSchema = new Schema({
     filename: String
 
   },
+  images: [
+    {
+      url: String,
+      filename: String
+    }
+  ],
   price: { type: Number, required: true },
   location: { type: String },
   country: { type: String },
+  category: {
+    type: String,
+    enum: [
+      'Rooms',
+      'Iconic Cities',
+      'Mountains',
+      'Castles',
+      'Amazing Pools',
+      'Camping',
+      'Farms',
+      'Arctic',
+      'Beachfront',
+      'Boats'
+    ],
+    default: 'Rooms'
+  },
   reviews: [
     {
     type: Schema.Types.ObjectId,
