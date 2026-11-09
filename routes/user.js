@@ -22,6 +22,16 @@ router.route('/login')
     userController.loginForm
   );
 
+// Forgot Password routes
+router.route('/forgot-password')
+  .get(userController.renderForgotPasswordForm)
+  .post(wrapAsync(userController.forgotPassword));
+
+// Reset Password routes
+router.route('/reset-password/:token')
+  .get(wrapAsync(userController.renderResetPasswordForm))
+  .post(wrapAsync(userController.resetPassword));
+
 // Host Dashboard Portal (Host only)
 router.get('/host/dashboard', isLoggedIn, wrapAsync(userController.renderHostDashboard));
 

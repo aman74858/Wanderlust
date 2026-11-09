@@ -60,7 +60,37 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
+
+// Configure Passport to allow login with either Username or Email
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const identifier = (username || '').trim();
+      // Search by username or email (case-insensitive email)
+      const user = await User.findOne({
+        $or: [
+          { username: identifier },
+          { email: identifier.toLowerCase() },
+        ],
+      });
+
+      if (!user) {
+        return done(null, false, {
+          message: 'No account found with that username or email address.',
+        });
+      }
+
+      const { user: authenticatedUser, error } = await user.authenticate(password);
+      if (error || !authenticatedUser) {
+        return done(null, false, { message: 'Incorrect password. Please try again.' });
+      }
+
+      return done(null, authenticatedUser);
+    } catch (err) {
+      return done(err);
+    }
+  })
+);
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
