@@ -11,8 +11,8 @@ Wanderlust is a full-stack accommodation marketplace where guests can discover a
 <a href="https://wanderlust-self-kappa.vercel.app/listings" target="_blank">
   Visit Wanderlust
 </a
-
 <br>
+
 ## ✨ Features
 
 - 🏡 **Browse Listings:** Explore accommodation listings and view detailed property information.
